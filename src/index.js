@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 // import store from './store'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Calendar } from './components'
+import App from './App'
 
 ReactDOM.render(
   <Router>
-    <Calendar />
+    <App />
   </Router>,
   document.getElementById('app')
 )
