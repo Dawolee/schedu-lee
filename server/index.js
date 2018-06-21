@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const PORT = process.env.PORT || 3000
 const app = express()
+const db = require('./db')
 
 app.use(morgan('dev'))
 
@@ -23,6 +24,9 @@ app.use((err, req, res, next) =>
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 )
 
-app.listen(PORT, () => console.log(`Server up and ready on port ${PORT}`))
+db.sync().then(() => {
+  console.log('Server synced up')
+  app.listen(PORT, () => console.log(`Server up and ready on port ${PORT}`))
+})
 
 module.exports = app

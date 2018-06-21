@@ -1,3 +1,5 @@
-export { default as Calendar } from './Calendar'
-export { default as Togglebar } from './Togglebar'
-export { default as Header } from './Header'
+export { default as Calendar } from './CalendarContainer'
+export { default as Togglebar } from './TogglebarContainer'
+export { default as Month } from './MonthContainer'
+export { default as Navbar } from './Navbar'
+export { default as Events } from './Events'

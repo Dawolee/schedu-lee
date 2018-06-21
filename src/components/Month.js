@@ -1,27 +1,34 @@
 import React, { Component } from 'react'
 import { Menu, Button, Container } from 'semantic-ui-react'
 
-export default class Header extends Component {
+export default class Month extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      month: 1
+      month: 1,
+      year: 2018
     }
-    this.changeMonth = this.changeView.bind(this)
+    this.changeView = this.changeView.bind(this)
   }
 
   changeView(bool) {
     let currentMonth = this.state.month
+    let currentYear = this.state.year
     //checks which button was pressed and increments/decrements accordingly
     bool ? currentMonth++ : currentMonth--
     //month resets to Jan if next is pressed on Dec
     if (currentMonth === 13) {
       currentMonth = 1
+      currentYear++
       //...and month resets to Dec if prev is pressed on Jan
     } else if (currentMonth === 0) {
       currentMonth = 12
+      currentYear--
     }
-    this.setState({ month: currentMonth })
+    //sets state to re-render view and updates the month in the store
+    this.setState({ month: currentMonth, year: currentYear }, () => {
+      this.props.changeDate({ month: currentMonth, year: currentYear })
+    })
   }
 
   render() {
@@ -40,13 +47,17 @@ export default class Header extends Component {
       11: 'November',
       12: 'December'
     }
+    const { month, year } = this.state
+
     return (
-      <Menu secondary widths={3}>
+      <Menu className="calendar-header" secondary widths={3}>
         <Menu.Item>
           <Button onClick={() => this.changeView(false)}>&#10094;</Button>
         </Menu.Item>
         <Menu.Item>
-          <h2>{months[this.state.month]} 2018</h2>
+          <h2>
+            {months[month]} {year}
+          </h2>
         </Menu.Item>
         <Menu.Item>
           <Button onClick={() => this.changeView(true)}>&#10095;</Button>
