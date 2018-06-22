@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { Grid, Container, Button, Popup, Form } from 'semantic-ui-react'
-import Events from './Events'
+import {
+  ColumnCreator,
+  DayRowCreator,
+  DatesRowCreator
+} from './HelperFunctions'
 
 export default class Calendar extends Component {
   constructor(props) {
@@ -29,85 +33,37 @@ export default class Calendar extends Component {
   }
 
   render() {
+    //converts the events array received from backend into a hashmap for easier lookup
+    let monthlyEvents = this.props.events.length
+      ? this.props.events.reduce(function(map, obj) {
+          map[obj.day] = map[obj.day] ? map[obj.day].concat(obj) : [obj]
+          return map
+        }, {})
+      : null
     let dates = 1
-    const ColumnHelper = (className, textAlign, key, content) => {
-      return (
-        <Grid.Column
-          className={className}
-          width={2}
-          key={key}
-          textAlign={textAlign}
-        >
-          {content}
-        </Grid.Column>
-      )
-    }
-    const RowCreator = (num, bool) => {
-      let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-      //if true (which only happens once anyways), makes a row of days
-      if (bool) {
-        return (
-          <Grid.Row className="grid-day-row" centered>
-            {days.map(day => {
-              return ColumnHelper('grid-day', 'center', day, day)
-            })}
-          </Grid.Row>
-        )
-      } else {
-        //otherwise, create columns and use the 'dates' variable declared above to keep track of how many days to put into the calendar
-        let { month, year } = this.props.currentDate
-        let columns = []
-        while (num > 0 && dates <= 35) {
-          dates <= 31
-            ? columns.push(
-                <Popup
-                  hideOnScroll
-                  position="left center"
-                  key={dates}
-                  trigger={ColumnHelper('grid-date', 'left', dates, dates)}
-                  on="click"
-                >
-                  <Popup.Header>
-                    Add Event to {month}/{dates}/{year}
-                  </Popup.Header>{' '}
-                  <Popup.Content>
-                    <Events />
-                  </Popup.Content>
-                </Popup>
-              )
-            : columns.push(ColumnHelper('grid-date', 'left', dates))
-          dates++
-          num--
-        }
-        return (
-          <Grid.Row className="grid-dates-row" centered>
-            {columns}
-          </Grid.Row>
-        )
-      }
-    }
     //togglebar updates the view and updates the view state, allowing calendar to alter its design
     let { currentView } = this.props
-
+    let { month, year } = this.state
     return (
       <Container className="calendar">
         {currentView === 'month' && (
           <Grid>
-            {RowCreator(7, true)}
-            {RowCreator(7, false)}
-            {RowCreator(7, false)}
-            {RowCreator(7, false)}
-            {RowCreator(7, false)}
-            {RowCreator(7, false)}
+            {DayRowCreator()}
+            {DatesRowCreator(7, dates, month, year, monthlyEvents)}
+            {DatesRowCreator(7, dates + 7, month, year, monthlyEvents)}
+            {DatesRowCreator(7, dates + 14, month, year, monthlyEvents)}
+            {DatesRowCreator(7, dates + 21, month, year, monthlyEvents)}
+            {DatesRowCreator(7, dates + 28, month, year, monthlyEvents)}
           </Grid>
         )}
         {currentView === 'week' && (
           <Grid>
-            {RowCreator(7, true)}
-            {RowCreator(7, false)}
+            {DayRowCreator()}
+            {DatesRowCreator(7, dates, month, year)}
           </Grid>
         )}
-        {currentView === 'day' && <Grid>{RowCreator(7, true)}</Grid>}
+        {currentView === 'day' && <Grid>{DayRowCreator()}</Grid>}
+        {currentView === 'day' && <Grid />}
       </Container>
     )
   }

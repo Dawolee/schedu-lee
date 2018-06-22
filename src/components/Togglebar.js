@@ -21,7 +21,7 @@ export default class Togglebar extends Component {
   render() {
     return (
       <Container className="toggle">
-        <Menu secondary color="green" inverted widths={3}>
+        <Menu secondary color="green" inverted widths={4}>
           <Menu.Item
             name="month"
             active={this.state.view === 'month'}
@@ -35,6 +35,11 @@ export default class Togglebar extends Component {
           <Menu.Item
             name="day"
             active={this.state.view === 'day'}
+            onClick={this.changeView}
+          />
+          <Menu.Item
+            name="events"
+            active={this.state.view === 'events'}
             onClick={this.changeView}
           />
         </Menu>
