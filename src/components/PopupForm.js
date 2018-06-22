@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { Popup, Grid, Button } from 'semantic-ui-react'
+import { Popup, Grid, Button, Card } from 'semantic-ui-react'
 import Events from './EventsContainer'
+import { connect } from 'react-redux'
+import { deleteEventFromDb } from '../store/events'
 
-export default class PopupForm extends Component {
+class PopupForm extends Component {
   constructor(props) {
     super(props)
     this.state = { isOpen: false }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   handleOpen() {
@@ -17,13 +20,24 @@ export default class PopupForm extends Component {
   handleClose() {
     this.setState({ isOpen: false })
   }
+
+  handleDelete(id) {
+    this.props.deleteEvent(id)
+  }
+
   render() {
     let { month, date, year, eventsObj } = this.props
     //stores names of all events for specific date
     let name = []
     if (eventsObj !== null && eventsObj[date]) {
       eventsObj[date].forEach(event =>
-        name.push({ name: event.name, id: event.id })
+        name.push({
+          name: event.name,
+          id: event.id,
+          description: event.description,
+          startTime: event.startTime,
+          endTime: event.endTime
+        })
       )
     }
     return (
@@ -65,55 +79,61 @@ export default class PopupForm extends Component {
                 <Popup
                   wide
                   key={n.id}
-                  hideOnScroll
                   position="bottom center"
                   trigger={<p className="popup-trigger">{n.name}</p>}
-                  on="click"
+                  on="focus"
+                  hideOnScroll
                 >
-                  <Grid divided columns="equal">
-                    <Grid.Column>
-                      <Popup
-                        trigger={
-                          <Button
-                            size="mini"
-                            color="blue"
-                            content="Edit"
-                            fluid
-                          />
-                        }
-                        size="tiny"
-                        on="focus"
-                      >
-                        <Popup.Header>Edit Event: {n.name}</Popup.Header>{' '}
-                        <Popup.Content>
-                          <Events
-                            id={n.id}
-                            month={month}
-                            date={date}
-                            year={year}
-                            handleClose={this.handleClose}
-                            type="edit"
-                          />
-                        </Popup.Content>
-                      </Popup>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Popup
-                        trigger={
-                          <Button
-                            size="mini"
-                            color="red"
-                            content="Delete"
-                            fluid
-                          />
-                        }
-                        content="Stay in Wonderland, and I show you how deep the rabbit hole goes."
-                        position="top center"
-                        size="tiny"
-                        inverted
-                      />
-                    </Grid.Column>
-                  </Grid>
+                  <Card>
+                    <Card.Content>
+                      <Card.Header>{n.name}</Card.Header>
+                      <Card.Meta>
+                        {month}/{date}
+                      </Card.Meta>
+                      <Card.Description>{n.description}</Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                      <div className="ui two buttons">
+                        <Popup
+                          trigger={
+                            <Button
+                              size="mini"
+                              basic
+                              color="green"
+                              content="Edit"
+                              fluid
+                            />
+                          }
+                          size="tiny"
+                          on="focus"
+                        >
+                          <Popup.Header>Edit Event: {n.name}</Popup.Header>{' '}
+                          <Popup.Content>
+                            <Events
+                              id={n.id}
+                              month={month}
+                              date={date}
+                              year={year}
+                              handleClose={this.handleClose}
+                              type="edit"
+                            />
+                          </Popup.Content>
+                        </Popup>
+                        <Popup
+                          trigger={
+                            <Button
+                              onClick={() => this.handleDelete(n.id)}
+                              size="mini"
+                              color="red"
+                              basic
+                              content="Delete"
+                              fluid
+                            />
+                          }
+                        />
+                      </div>
+                    </Card.Content>
+                  </Card>
                 </Popup>
               )
             })}
@@ -122,3 +142,24 @@ export default class PopupForm extends Component {
     )
   }
 }
+
+const mapState = state => {
+  return {
+    events: state.events
+  }
+}
+
+//allows the delete button to dispatch the event deletion to the backend
+
+const mapDispatch = dispatch => {
+  return {
+    deleteEvent: id => {
+      dispatch(deleteEventFromDb(id))
+    }
+  }
+}
+
+export default connect(
+  mapState,
+  mapDispatch
+)(PopupForm)

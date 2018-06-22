@@ -10,7 +10,6 @@ export default class Events extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
   }
 
   handleSubmit(event) {
@@ -42,12 +41,6 @@ export default class Events extends Component {
   }
 
   handleChange(e, { value }) {}
-
-  handleDelete(id) {
-    let { deleteEvent, handleClose } = this.props
-    deleteEvent(id)
-    handleClose()
-  }
 
   render() {
     const hrOptions = []

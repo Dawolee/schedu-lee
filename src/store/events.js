@@ -20,9 +20,10 @@ export const postEvent = event => {
   }
 }
 
-export const deleteEvent = () => {
+export const deleteEvent = id => {
   return {
-    type: DELETE_EVENT
+    type: DELETE_EVENT,
+    id
   }
 }
 
@@ -58,8 +59,8 @@ export const deleteEventFromDb = id => dispatch => {
   return axios
     .delete(`/api/events/${id}`)
     .then(res => res.data)
-    .then(event => {
-      dispatch(deleteEvent(event))
+    .then(() => {
+      dispatch(deleteEvent(id))
     })
     .catch(err => console.log(err))
 }
@@ -82,6 +83,8 @@ export default function(state = {}, action) {
       return [...state, action.event]
     case PUT_EVENT:
       return action.event
+    case DELETE_EVENT:
+      return state.filter(event => event.id !== action.id)
     default:
       return state
   }
