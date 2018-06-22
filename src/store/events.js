@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { Z_DEFAULT_STRATEGY } from 'zlib'
 
 const FETCH_EVENTS = 'FETCH_EVENTS'
 const POST_EVENT = 'POST_EVENT'
@@ -81,8 +80,11 @@ export default function(state = {}, action) {
       return action.events
     case POST_EVENT:
       return [...state, action.event]
+    //put event filters out old existing event and concats the new one after updating
     case PUT_EVENT:
-      return action.event
+      return state
+        .filter(event => event.id !== action.event.id)
+        .concat(action.event)
     case DELETE_EVENT:
       return state.filter(event => event.id !== action.id)
     default:

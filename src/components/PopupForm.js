@@ -7,10 +7,11 @@ import { deleteEventFromDb } from '../store/events'
 class PopupForm extends Component {
   constructor(props) {
     super(props)
-    this.state = { isOpen: false }
+    this.state = { isOpen: false, edit: false }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
   }
 
   handleOpen() {
@@ -18,16 +19,20 @@ class PopupForm extends Component {
   }
 
   handleClose() {
-    this.setState({ isOpen: false })
+    this.setState({ isOpen: false, edit: false })
   }
 
   handleDelete(id) {
     this.props.deleteEvent(id)
   }
 
+  handleEdit() {
+    this.setState({ edit: true }, () => {})
+  }
+
   render() {
     let { month, date, year, eventsObj } = this.props
-    //stores names of all events for specific date
+    //stores names and properties of all events for specific date
     let name = []
     if (eventsObj !== null && eventsObj[date]) {
       eventsObj[date].forEach(event =>
@@ -41,12 +46,7 @@ class PopupForm extends Component {
       )
     }
     return (
-      <Grid.Column
-        className="grid-date"
-        width={2}
-        key={date}
-        textAlign="center"
-      >
+      <Grid.Column className="grid-date" width={2} key={date} textAlign="left">
         <Popup
           hideOnScroll
           open={this.state.isOpen}
@@ -54,8 +54,9 @@ class PopupForm extends Component {
           onOpen={this.handleOpen}
           position="left center"
           trigger={
-            <Button size="mini" className="popup-trigger">
-              {date}
+            <Button color="black" basic animated size="mini">
+              <Button.Content visible>{date}</Button.Content>
+              <Button.Content hidden>Add</Button.Content>
             </Button>
           }
           on="click"
@@ -73,67 +74,69 @@ class PopupForm extends Component {
           </Popup.Content>
         </Popup>
         <div className="grid-date-inner">
+          {/* For each event in a date, creates a
+          popup that allows you to either edit or delete
+          the event*/}
           {name &&
             name.map(n => {
               return (
                 <Popup
                   wide
+                  onClose={this.handleClose}
                   key={n.id}
                   position="bottom center"
-                  trigger={<p className="popup-trigger">{n.name}</p>}
+                  trigger={<div className="popup-trigger">{n.name}</div>}
                   on="focus"
                   hideOnScroll
                 >
-                  <Card>
-                    <Card.Content>
-                      <Card.Header>{n.name}</Card.Header>
-                      <Card.Meta>
-                        {month}/{date}
-                      </Card.Meta>
-                      <Card.Description>{n.description}</Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                      <div className="ui two buttons">
-                        <Popup
-                          trigger={
-                            <Button
-                              size="mini"
-                              basic
-                              color="green"
-                              content="Edit"
-                              fluid
-                            />
-                          }
-                          size="tiny"
-                          on="focus"
-                        >
-                          <Popup.Header>Edit Event: {n.name}</Popup.Header>{' '}
-                          <Popup.Content>
-                            <Events
-                              id={n.id}
-                              month={month}
-                              date={date}
-                              year={year}
-                              handleClose={this.handleClose}
-                              type="edit"
-                            />
-                          </Popup.Content>
-                        </Popup>
-                        <Popup
-                          trigger={
-                            <Button
-                              onClick={() => this.handleDelete(n.id)}
-                              size="mini"
-                              color="red"
-                              basic
-                              content="Delete"
-                              fluid
-                            />
-                          }
-                        />
-                      </div>
-                    </Card.Content>
-                  </Card>
+                  {/* If the current state is not set to edit, renders out the
+                  event and it's information, along with the button to edit and delete
+                  the event. If current state is set to edit, opens up an edit form */}
+                  {!this.state.edit ? (
+                    <Card>
+                      <Card.Content>
+                        <Card.Header textAlign="center">{n.name}</Card.Header>
+                        <Card.Meta textAlign="center">
+                          {month}/{date} from {n.startTime}-{n.endTime}
+                        </Card.Meta>
+                        <Card.Description textAlign="center">
+                          {n.description}
+                        </Card.Description>
+                      </Card.Content>
+                      <Card.Content extra>
+                        <div className="ui two buttons">
+                          <Button
+                            size="mini"
+                            color="green"
+                            content="Edit"
+                            fluid
+                            inverted
+                            onClick={this.handleEdit}
+                          />
+                          <Button
+                            onClick={() => this.handleDelete(n.id)}
+                            inverted
+                            size="mini"
+                            color="red"
+                            content="Delete"
+                            fluid
+                          />
+                          } />
+                        </div>
+                      </Card.Content>
+                    </Card>
+                  ) : (
+                    <Events
+                      id={n.id}
+                      month={month}
+                      date={date}
+                      year={year}
+                      startTime={n.startTime}
+                      endTime={n.endTime}
+                      type="edit"
+                      handleClose={this.handleClose}
+                    />
+                  )}
                 </Popup>
               )
             })}
@@ -150,7 +153,6 @@ const mapState = state => {
 }
 
 //allows the delete button to dispatch the event deletion to the backend
-
 const mapDispatch = dispatch => {
   return {
     deleteEvent: id => {

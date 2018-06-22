@@ -33,6 +33,7 @@ export const ColumnCreator = (
 }
 
 export const DayRowCreator = () => {
+  //maps through the days and creates a column for each
   let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   return (
     <Grid.Row className="grid-day-row" centered>
@@ -45,29 +46,65 @@ export const DayRowCreator = () => {
 
 export const DatesRowCreator = (
   numOfCols,
-  numOfDates,
+  currentDate,
   month,
   year,
-  eventsObj
+  eventsObj,
+  startingDay
 ) => {
+  let daysInMonth = 31
+  let monthsWithThirtyDays = [4, 6, 9, 11]
+
+  //sets max amount of days per month
+  if (month === 2) {
+    daysInMonth = 28
+  } else if (monthsWithThirtyDays.includes(month)) {
+    daysInMonth = 30
+  }
+
   let columns = []
-  while (numOfCols > 0 && numOfDates <= 35) {
-    numOfDates <= 31
+  //inputs blank columns to fill in space before starting date
+  while (startingDay > 0) {
+    columns.push(ColumnCreator('grid-date', 'left', startingDay))
+    startingDay--
+  }
+  while (columns.length < numOfCols) {
+    {
+      /* If the dates in the month are not all filled out,
+    push popup forms, otherwise put in more blank spaces to fill
+    out the calendar */
+    }
+    currentDate <= daysInMonth
       ? columns.push(
           <PopupForm
-            date={numOfDates}
+            date={currentDate}
             year={year}
             month={month}
             eventsObj={eventsObj}
           />
         )
-      : columns.push(ColumnCreator('grid-date', 'left', numOfDates))
-    numOfDates++
-    numOfCols--
+      : columns.push(ColumnCreator('grid-date', 'left', currentDate))
+    currentDate++
   }
   return (
-    <Grid.Row className="grid-dates-row" centered>
+    <Grid.Row columns={7} className="grid-dates-row" centered>
       {columns}
     </Grid.Row>
   )
+}
+
+export const EventColumnCreator = (type, name) => {
+  if (type === 'header') {
+    return (
+      <Grid.Column textAlign="center">
+        <h4>{name}</h4>
+      </Grid.Column>
+    )
+  } else {
+    return (
+      <Grid.Column textAlign="center">
+        <p>{name}</p>
+      </Grid.Column>
+    )
+  }
 }

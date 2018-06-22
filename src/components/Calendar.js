@@ -5,12 +5,15 @@ import {
   Button,
   Popup,
   Form,
-  GridColumn
+  GridColumn,
+  Icon
 } from 'semantic-ui-react'
+//importing helper functions to create reusable components
 import {
   ColumnCreator,
   DayRowCreator,
-  DatesRowCreator
+  DatesRowCreator,
+  EventColumnCreator
 } from './HelperFunctions'
 
 export default class Calendar extends Component {
@@ -47,20 +50,34 @@ export default class Calendar extends Component {
           return map
         }, {})
       : null
-    let dates = 1
+
     //togglebar updates the view and updates the view state, allowing calendar to alter its design
     let { currentView } = this.props
     let { month, year } = this.state
+
+    //formula to figure out which day/date the month starts on
+    let startingDay = new Date(year + '-' + month + '-01').getDay()
+    let currentDate = 1
     return (
       <Container className="calendar">
+        {/* Depending on the currentView, alters how what the calendar displays */}
         {currentView === 'month' && (
           <Grid>
             {DayRowCreator()}
-            {DatesRowCreator(7, dates, month, year, monthlyEvents)}
-            {DatesRowCreator(7, dates + 7, month, year, monthlyEvents)}
-            {DatesRowCreator(7, dates + 14, month, year, monthlyEvents)}
-            {DatesRowCreator(7, dates + 21, month, year, monthlyEvents)}
-            {DatesRowCreator(7, dates + 28, month, year, monthlyEvents)}
+            {DatesRowCreator(
+              7,
+              currentDate,
+              month,
+              year,
+              monthlyEvents,
+              startingDay
+            )}
+            {DatesRowCreator(7, currentDate + 7, month, year, monthlyEvents)}
+            {DatesRowCreator(7, currentDate + 14, month, year, monthlyEvents)}
+            {DatesRowCreator(7, currentDate + 21, month, year, monthlyEvents)}
+            {/* If February, only render out 4 rows of dates */}
+            {month !== 2 &&
+              DatesRowCreator(7, currentDate + 28, month, year, monthlyEvents)}
           </Grid>
         )}
         {currentView === 'week' && <Grid>{DayRowCreator()}</Grid>}
@@ -68,38 +85,25 @@ export default class Calendar extends Component {
         {currentView === 'events' && (
           <Grid divided="vertically">
             <Grid.Row centered columns={4}>
-              <Grid.Column textAlign="center">
-                <h4>Date</h4>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <h4>Time</h4>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <h4>Name Of Event</h4>
-              </Grid.Column>
-              <Grid.Column textAlign="center">
-                <h4>Description</h4>
-              </Grid.Column>
+              {EventColumnCreator('header', 'Date')}
+              {EventColumnCreator('header', 'Time')}
+              {EventColumnCreator('header', 'Event Name')}
+              {EventColumnCreator('header', 'Description')}
             </Grid.Row>
             {this.props.events.map(event => {
+              {
+                /* Creates a row for every event, including its name, date,
+              start/end time and description*/
+              }
               return (
-                <Grid.Row centered columns={4}>
-                  <Grid.Column textAlign="center">
-                    <p>
-                      {event.month}/{event.day}
-                    </p>
-                  </Grid.Column>
-                  <Grid.Column textAlign="center">
-                    <p>
-                      {event.startTime} - {event.endTime}
-                    </p>
-                  </Grid.Column>
-                  <Grid.Column textAlign="center">
-                    <p>{event.name}</p>
-                  </Grid.Column>
-                  <Grid.Column textAlign="center">
-                    <p>{event.description}</p>
-                  </Grid.Column>
+                <Grid.Row key={event.id} centered columns={4}>
+                  {EventColumnCreator(null, `${event.month}/${event.day}`)}
+                  {EventColumnCreator(
+                    null,
+                    `${event.startTime} - ${event.endTime}`
+                  )}
+                  {EventColumnCreator(null, `${event.name}`)}
+                  {EventColumnCreator(null, `${event.description}`)}
                 </Grid.Row>
               )
             })}

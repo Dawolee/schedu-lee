@@ -1,10 +1,6 @@
 import { connect } from 'react-redux'
 import Events from './Events'
-import {
-  postEventToDb,
-  deleteEventFromDb,
-  updateEventInDb
-} from '../store/events'
+import { postEventToDb, updateEventInDb } from '../store/events'
 
 const mapState = state => {
   return {
@@ -16,9 +12,6 @@ const mapDispatch = dispatch => {
   return {
     createEvent: eventObj => {
       dispatch(postEventToDb(eventObj))
-    },
-    deleteEvent: id => {
-      dispatch(deleteEventFromDb(id))
     },
     updateEvent: (id, eventObj) => {
       dispatch(updateEventInDb(id, eventObj))

@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/api', require('./api'))
 
+//to serve static files
 app.use(express.static(path.join(__dirname, '..', 'node_modules')))
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
@@ -24,7 +25,7 @@ app.use((err, req, res, next) =>
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 )
 
-db.sync({ force: true }).then(() => {
+db.sync().then(() => {
   console.log('Server synced up')
   app.listen(PORT, () => console.log(`Server up and ready on port ${PORT}`))
 })

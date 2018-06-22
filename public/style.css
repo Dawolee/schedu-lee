@@ -1,9 +1,10 @@
 .calendar-header {
   height: 5%;
+  margin-top: 1% !important;
 }
 
 .toggle {
-  margin-bottom: 1%;
+  margin-bottom: 1.5%;
 }
 
 .grid-date,
@@ -14,7 +15,7 @@
 }
 
 .grid-date {
-  height: 9em;
+  height: 7em;
   overflow: auto;
 }
 
@@ -40,6 +41,9 @@
 
 .popup-trigger {
   text-align: center;
+  width: 70%;
+  padding: 1%;
+  margin: 1% auto 0 auto;
   transition: 0.7s;
 }
 
@@ -57,4 +61,10 @@
 
 .event-view-columns {
   text-align: center;
+}
+
+.form-btn {
+  display: flex !important;
+  justify-content: center;
+  margin: 0 auto 0 auto !important;
 }
