@@ -20,25 +20,6 @@ export const ColumnCreator = (
         {key}
       </Grid.Column>
     )
-  } else if (type === 'dates') {
-    let name = []
-    if (eventsObj !== null && eventsObj[key]) {
-      eventsObj[key].forEach(event => name.push(event.name))
-    }
-    return (
-      <Grid.Column
-        className={className}
-        width={2}
-        key={key}
-        textAlign={textAlign}
-      >
-        {key}
-        {name &&
-          name.map(n => {
-            return <p>{n}</p>
-          })}
-      </Grid.Column>
-    )
   } else {
     return (
       <Grid.Column

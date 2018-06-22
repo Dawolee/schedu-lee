@@ -5,16 +5,25 @@ export default class Events extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      type: 'submit',
       startTime: {},
       endTime: {}
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   handleSubmit(event) {
-    let { month, year, date, createEvent, handleClose } = this.props
+    let {
+      month,
+      year,
+      date,
+      createEvent,
+      handleClose,
+      type,
+      updateEvent,
+      id
+    } = this.props
     //creates the event object to match our database model
     let eventObj = {}
     eventObj.name = event.target.name.value
@@ -22,13 +31,23 @@ export default class Events extends Component {
     eventObj.month = month
     eventObj.day = date
     eventObj.year = year
-    //sends the eventObj to the backend
-    createEvent(eventObj)
+    //sends the eventObj to the backend for update or create, depending on the type of button was pressed
+    if (type === 'edit') {
+      updateEvent(id, eventObj)
+    } else {
+      createEvent(eventObj)
+    }
     //and closes the popup window
     handleClose()
   }
 
   handleChange(e, { value }) {}
+
+  handleDelete(id) {
+    let { deleteEvent, handleClose } = this.props
+    deleteEvent(id)
+    handleClose()
+  }
 
   render() {
     const hrOptions = []
@@ -43,13 +62,12 @@ export default class Events extends Component {
       { key: 'PM', value: 'PM', text: 'PM' }
     ]
     //form creator help function
-    const FormSelect = (fun, label, options, defaultVal) => {
+    const FormSelect = (options, defaultVal) => {
       return (
         <Form.Select
           fluid
           onChange={this.handleChange}
           defaultValue={defaultVal}
-          label={label}
           options={options}
         />
       )
@@ -58,31 +76,41 @@ export default class Events extends Component {
     for (let i = 1; i <= 12; i++) {
       hrOptions.push({ key: i, value: i, text: i })
     }
-    let { type } = this.state
+    let { type, id } = this.props
     return (
-      <Form onSubmit={this.handleSubmit} size="small">
-        <Form.Field required={true}>
-          <label>Event Name</label>
-          <input name="name" placeholder="Event Name Here..." />
-        </Form.Field>
-        <label className="form-label">Start Time</label>
-        <Form.Group name="startTime" widths="equal">
-          {FormSelect('startHr', 'Hr', hrOptions, 12)}
-          {FormSelect('startMin', 'Min', minOptions, 0)}
-          {FormSelect('startAMPM', 'AM/PM', ampmOptions, 'PM')}
-        </Form.Group>
-        <label className="form-label">End Time</label>
-        <Form.Group widths="equal">
-          {FormSelect('endHr', 'Hr', hrOptions, 1)}
-          {FormSelect('endMin', 'Min', minOptions, 0)}
-          {FormSelect('endAMPM', 'AM/PM', ampmOptions, 'PM')}
-        </Form.Group>
-        <Form.TextArea
-          name="description"
-          placeholder="Type event description in here..."
-        />
-        <Form.Button>Submit</Form.Button>
-      </Form>
+      <div>
+        <Form onSubmit={this.handleSubmit} size="small">
+          <Form.Field required={true}>
+            <label>Event Name</label>
+            <input name="name" placeholder="Event Name Here..." />
+          </Form.Field>
+          <label className="form-label">Start Time</label>
+          <Form.Group name="startTime" widths="equal">
+            {FormSelect(hrOptions, 12)}
+            {FormSelect(minOptions, 0)}
+            {FormSelect(ampmOptions, 'PM')}
+          </Form.Group>
+          <label className="form-label">End Time</label>
+          <Form.Group widths="equal">
+            {FormSelect(hrOptions, 1)}
+            {FormSelect(minOptions, 0)}
+            {FormSelect(ampmOptions, 'PM')}
+          </Form.Group>
+          <Form.TextArea
+            name="description"
+            placeholder="Type event description in here..."
+          />
+          {type !== 'edit' ? (
+            <Form.Button color="green" inverted>
+              Submit
+            </Form.Button>
+          ) : (
+            <Form.Button center color="blue" inverted>
+              Edit
+            </Form.Button>
+          )}
+        </Form>
+      </div>
     )
   }
 }

@@ -56,12 +56,7 @@ export default class Calendar extends Component {
             {DatesRowCreator(7, dates + 28, month, year, monthlyEvents)}
           </Grid>
         )}
-        {currentView === 'week' && (
-          <Grid>
-            {DayRowCreator()}
-            {DatesRowCreator(7, dates, month, year)}
-          </Grid>
-        )}
+        {currentView === 'week' && <Grid>{DayRowCreator()}</Grid>}
         {currentView === 'day' && <Grid>{DayRowCreator()}</Grid>}
         {currentView === 'day' && <Grid />}
       </Container>

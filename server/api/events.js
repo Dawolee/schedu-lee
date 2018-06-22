@@ -13,4 +13,28 @@ router.post('/', (req, res, next) => {
     .catch(next)
 })
 
+router.delete('/:id', (req, res, next) => {
+  Event.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(() => res.json(''))
+    .catch(next)
+})
+
+router.put('/:id', (req, res, next) => {
+  Event.update(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+    //finding by ID again since .update returns how many instances were updated
+    .then(() => Event.findById(req.params.id))
+    .then(event => {
+      res.json(event)
+    })
+    .catch(next)
+})
+
 module.exports = router

@@ -15,8 +15,11 @@
 
 .grid-date {
   height: 14%;
-  padding: 0 0 0 1% !important;
   overflow: auto;
+}
+
+.grid-date-inner {
+  padding: 1%;
 }
 
 .grid-day-row {
@@ -32,5 +35,22 @@
 .form-label {
   display: flex;
   margin: 0 0 1% 0;
+  justify-content: center;
+}
+
+.popup-trigger {
+  text-align: center;
+  transition: 0.7s;
+}
+
+.popup-trigger:hover {
+  cursor: pointer;
+  color: green;
+  opacity: 0.7;
+  transition: 0.7s;
+}
+
+.edit-form {
+  display: flex;
   justify-content: center;
 }
