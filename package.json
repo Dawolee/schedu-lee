@@ -34,5 +34,8 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.81.1",
     "sequelize": "^4.37.10"
+  },
+  "engines": {
+    "node": "10.5.0"
   }
 }
