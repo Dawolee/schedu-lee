@@ -14,7 +14,7 @@
 }
 
 .grid-date {
-  height: 14%;
+  height: 9em;
   overflow: auto;
 }
 
@@ -53,4 +53,8 @@
 .edit-form {
   display: flex;
   justify-content: center;
+}
+
+.event-view-columns {
+  text-align: center;
 }

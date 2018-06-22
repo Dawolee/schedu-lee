@@ -63,23 +63,57 @@ export default class PopupForm extends Component {
             name.map(n => {
               return (
                 <Popup
+                  wide
                   key={n.id}
                   hideOnScroll
-                  position="right center"
+                  position="bottom center"
                   trigger={<p className="popup-trigger">{n.name}</p>}
                   on="click"
                 >
-                  <Popup.Header>Edit Event: {n.name}</Popup.Header>{' '}
-                  <Popup.Content>
-                    <Events
-                      id={n.id}
-                      month={month}
-                      date={date}
-                      year={year}
-                      handleClose={this.handleClose}
-                      type="edit"
-                    />
-                  </Popup.Content>
+                  <Grid divided columns="equal">
+                    <Grid.Column>
+                      <Popup
+                        trigger={
+                          <Button
+                            size="mini"
+                            color="blue"
+                            content="Edit"
+                            fluid
+                          />
+                        }
+                        size="tiny"
+                        on="focus"
+                      >
+                        <Popup.Header>Edit Event: {n.name}</Popup.Header>{' '}
+                        <Popup.Content>
+                          <Events
+                            id={n.id}
+                            month={month}
+                            date={date}
+                            year={year}
+                            handleClose={this.handleClose}
+                            type="edit"
+                          />
+                        </Popup.Content>
+                      </Popup>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Popup
+                        trigger={
+                          <Button
+                            size="mini"
+                            color="red"
+                            content="Delete"
+                            fluid
+                          />
+                        }
+                        content="Stay in Wonderland, and I show you how deep the rabbit hole goes."
+                        position="top center"
+                        size="tiny"
+                        inverted
+                      />
+                    </Grid.Column>
+                  </Grid>
                 </Popup>
               )
             })}

@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { Grid, Container, Button, Popup, Form } from 'semantic-ui-react'
+import {
+  Grid,
+  Container,
+  Button,
+  Popup,
+  Form,
+  GridColumn
+} from 'semantic-ui-react'
 import {
   ColumnCreator,
   DayRowCreator,
@@ -58,7 +65,46 @@ export default class Calendar extends Component {
         )}
         {currentView === 'week' && <Grid>{DayRowCreator()}</Grid>}
         {currentView === 'day' && <Grid>{DayRowCreator()}</Grid>}
-        {currentView === 'day' && <Grid />}
+        {currentView === 'events' && (
+          <Grid divided="vertically">
+            <Grid.Row centered columns={4}>
+              <Grid.Column textAlign="center">
+                <h4>Date</h4>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <h4>Time</h4>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <h4>Name Of Event</h4>
+              </Grid.Column>
+              <Grid.Column textAlign="center">
+                <h4>Description</h4>
+              </Grid.Column>
+            </Grid.Row>
+            {this.props.events.map(event => {
+              return (
+                <Grid.Row centered columns={4}>
+                  <Grid.Column textAlign="center">
+                    <p>
+                      {event.month}/{event.day}
+                    </p>
+                  </Grid.Column>
+                  <Grid.Column textAlign="center">
+                    <p>
+                      {event.startTime} - {event.endTime}
+                    </p>
+                  </Grid.Column>
+                  <Grid.Column textAlign="center">
+                    <p>{event.name}</p>
+                  </Grid.Column>
+                  <Grid.Column textAlign="center">
+                    <p>{event.description}</p>
+                  </Grid.Column>
+                </Grid.Row>
+              )
+            })}
+          </Grid>
+        )}
       </Container>
     )
   }
