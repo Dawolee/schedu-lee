@@ -79,3 +79,8 @@
 .single-card {
   margin-bottom: 5% !important;
 }
+
+.no-events {
+  margin: 0 auto 0 auto !important;
+  text-align: center;
+}

@@ -91,6 +91,11 @@ export default class Calendar extends Component {
               {EventColumnCreator('header', 'Event Name')}
               {EventColumnCreator('header', 'Description')}
             </Grid.Row>
+
+            {/* prints when there are no events for the current month */}
+            {!this.props.events.length && (
+              <h3 className="no-events">You Have No Events For This Month!</h3>
+            )}
             {this.props.events.sort((a, b) => a.day > b.day).map(event => {
               {
                 /* Sorts the events by day and then creates a row for every event, including its name, date,

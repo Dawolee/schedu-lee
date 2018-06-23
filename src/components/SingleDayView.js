@@ -72,6 +72,12 @@ export default class SingleDayView extends Component {
         </Menu>
 
         <div className="single-day-cards">
+          {/* prints when there are no events for the current date */}
+          {!sortedEvents.length && (
+            <h3 className="no-events">
+              You Have No Events Planned For This Date
+            </h3>
+          )}
           {sortedEvents.length > 0 &&
             sortedEvents.map(event => {
               return (
