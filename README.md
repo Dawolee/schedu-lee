@@ -1,6 +1,4 @@
-## Da Woon Lee
-
-### Spotify Stage Two Web App
+## Spotify Stage Two Web App
 
 Deployed link here: https://spotify-stage-two.herokuapp.com/
 
