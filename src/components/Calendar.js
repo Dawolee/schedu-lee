@@ -74,12 +74,34 @@ export default class Calendar extends Component {
               monthlyEvents,
               startingDay
             )}
-            {DatesRowCreator(7, currentDate + 7, month, year, monthlyEvents)}
-            {DatesRowCreator(7, currentDate + 14, month, year, monthlyEvents)}
-            {DatesRowCreator(7, currentDate + 21, month, year, monthlyEvents)}
-            {/* If February, only render out 4 rows of dates */}
-            {month !== 2 &&
-              DatesRowCreator(7, currentDate + 28, month, year, monthlyEvents)}
+            {DatesRowCreator(
+              7,
+              currentDate + 7 - startingDay,
+              month,
+              year,
+              monthlyEvents
+            )}
+            {DatesRowCreator(
+              7,
+              currentDate + 14 - startingDay,
+              month,
+              year,
+              monthlyEvents
+            )}
+            {DatesRowCreator(
+              7,
+              currentDate + 21 - startingDay,
+              month,
+              year,
+              monthlyEvents
+            )}
+            {DatesRowCreator(
+              7,
+              currentDate + 28 - startingDay,
+              month,
+              year,
+              monthlyEvents
+            )}
           </Grid>
         )}
         {currentView === 'day' && <SingleDayView />}
