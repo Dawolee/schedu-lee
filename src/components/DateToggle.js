@@ -35,7 +35,7 @@ export default class DateToggle extends Component {
       currentDate = 1
 
       //sets state to re-render view and updates the month in the store
-      this.setState({ month: currentMonth, year: currentYear }, () => {
+      this.setState({ month: currentMonth, year: currentYear, day: currentDate }, () => {
         this.props.changeDate({
           month: currentMonth,
           year: currentYear,
