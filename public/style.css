@@ -40,7 +40,7 @@
 }
 
 .popup-trigger {
-  text-align: center;
+  text-align: left;
   width: 70%;
   padding: 1%;
   margin: 1% auto 0 auto;
@@ -67,4 +67,15 @@
   display: flex !important;
   justify-content: center;
   margin: 0 auto 0 auto !important;
+}
+
+.single-day-cards {
+  margin-top: 1.5%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.single-card {
+  margin-bottom: 5% !important;
 }

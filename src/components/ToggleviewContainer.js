@@ -1,17 +1,17 @@
 import { connect } from 'react-redux'
-import Month from './Month'
-import { updateDate } from '../store/date'
+import Toggleview from './Toggleview'
+import { updateView } from '../store/view'
 
 const mapState = state => {
   return {
-    currentDate: state.date
+    currentView: state.view
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    changeDate: date => {
-      dispatch(updateDate(date))
+    viewChange: view => {
+      dispatch(updateView(view))
     }
   }
 }
@@ -19,4 +19,4 @@ const mapDispatch = dispatch => {
 export default connect(
   mapState,
   mapDispatch
-)(Month)
+)(Toggleview)

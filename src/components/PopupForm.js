@@ -27,7 +27,7 @@ class PopupForm extends Component {
   }
 
   handleEdit() {
-    this.setState({ edit: true }, () => {})
+    this.setState({ edit: true })
   }
 
   render() {

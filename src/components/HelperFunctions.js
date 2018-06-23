@@ -32,16 +32,26 @@ export const ColumnCreator = (
   }
 }
 
-export const DayRowCreator = () => {
+export const DayRowCreator = type => {
   //maps through the days and creates a column for each
   let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  return (
-    <Grid.Row className="grid-day-row" centered>
-      {days.map(day => {
-        return ColumnCreator('grid-day', 'center', day, 'days')
-      })}
-    </Grid.Row>
-  )
+  if (type === 'month') {
+    return (
+      <Grid.Row className="grid-day-row" centered>
+        {days.map(day => {
+          return ColumnCreator('grid-day', 'center', day, 'days')
+        })}
+      </Grid.Row>
+    )
+  } else if (type === 'day') {
+    return (
+      <Grid.Row className="grid-day-row" centered>
+        {days.map(day => {
+          return ColumnCreator('grid-day', 'center', day, 'days')
+        })}
+      </Grid.Row>
+    )
+  }
 }
 
 export const DatesRowCreator = (

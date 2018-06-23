@@ -16,6 +16,8 @@ import {
   EventColumnCreator
 } from './HelperFunctions'
 
+import { SingleDayView } from './index'
+
 export default class Calendar extends Component {
   constructor(props) {
     super(props)
@@ -63,7 +65,7 @@ export default class Calendar extends Component {
         {/* Depending on the currentView, alters how what the calendar displays */}
         {currentView === 'month' && (
           <Grid>
-            {DayRowCreator()}
+            {DayRowCreator('month')}
             {DatesRowCreator(
               7,
               currentDate,
@@ -80,8 +82,7 @@ export default class Calendar extends Component {
               DatesRowCreator(7, currentDate + 28, month, year, monthlyEvents)}
           </Grid>
         )}
-        {currentView === 'week' && <Grid>{DayRowCreator()}</Grid>}
-        {currentView === 'day' && <Grid>{DayRowCreator()}</Grid>}
+        {currentView === 'day' && <SingleDayView />}
         {currentView === 'events' && (
           <Grid divided="vertically">
             <Grid.Row centered columns={4}>
@@ -90,9 +91,9 @@ export default class Calendar extends Component {
               {EventColumnCreator('header', 'Event Name')}
               {EventColumnCreator('header', 'Description')}
             </Grid.Row>
-            {this.props.events.map(event => {
+            {this.props.events.sort((a, b) => a.day > b.day).map(event => {
               {
-                /* Creates a row for every event, including its name, date,
+                /* Sorts the events by day and then creates a row for every event, including its name, date,
               start/end time and description*/
               }
               return (

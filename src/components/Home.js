@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Month, Calendar, Togglebar } from './index'
+import { DateToggle, Calendar, Toggleview } from './index'
 
 export default class Home extends Component {
   render() {
     return (
       <div>
-        <Month />
-        <Togglebar />
+        <DateToggle />
+        <Toggleview />
         <Calendar />
       </div>
     )
