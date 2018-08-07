@@ -4,7 +4,7 @@ import { Menu } from 'semantic-ui-react'
 export default function Navbar() {
   return (
     <Menu inverted compact borderless attached widths={3}>
-      <Menu.Item />
+      <Menu.Item>s</Menu.Item>
       <Menu.Item>Schedu-Lee</Menu.Item>
       <Menu.Item>Da Woon Lee</Menu.Item>
     </Menu>
