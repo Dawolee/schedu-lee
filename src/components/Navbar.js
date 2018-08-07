@@ -6,7 +6,7 @@ export default function Navbar() {
     <Menu inverted compact borderless attached widths={3}>
       <Menu.Item>Da Woon Lee</Menu.Item>
       <Menu.Item>Schedu-Lee</Menu.Item>
-      <Menu.Item />
+      <Menu.Item>Test</Menu.Item>
     </Menu>
   )
 }
